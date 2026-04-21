@@ -1,4 +1,4 @@
-package com.example.myapplication.adapterimport
+package com.example.myapplication.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +7,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.models.PedidoComida // <--- Cambiado
+import com.example.myapplication.models.PedidoComida
 
 class PedidoTemporalAdapter(
-    private val items: MutableList<PedidoComida>, // <--- Cambiado
+    private val items: MutableList<PedidoComida>,
     private val onEliminarClick: (Int) -> Unit
 ) : RecyclerView.Adapter<PedidoTemporalAdapter.ViewHolder>() {
 

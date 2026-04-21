@@ -12,6 +12,7 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.ComidaAdapter
 import com.example.myapplication.interfaces.ComidaAPI
 import com.example.myapplication.models.Comida
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,8 +38,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun obtenerTodasLasComidas() {
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Accept", "application/json")
+                .build()
+            chain.proceed(request)
+        }.build()
+
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/")
+            .baseUrl("http://10.0.2.2:8000/api/")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -48,7 +57,9 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<List<Comida>>, response: Response<List<Comida>>) {
                 if (response.isSuccessful) {
                     val lista = response.body() ?: emptyList()
-                    recyclerView.adapter = ComidaAdapter(lista)
+                    recyclerView.adapter = ComidaAdapter(lista) {
+                        // Acción al hacer clic, por ahora vacía
+                    }
                 }
             }
 

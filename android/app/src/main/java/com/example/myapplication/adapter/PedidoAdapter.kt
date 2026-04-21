@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.models.Pedido
 
-class PedidoAdapter(private val pedidoList: List<Pedido>) : RecyclerView.Adapter<PedidoViewHolder>() {
+class PedidoAdapter(
+    private val pedidoList: MutableList<Pedido>,
+    private val onEditClick: (Pedido) -> Unit
+) : RecyclerView.Adapter<PedidoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -14,8 +17,20 @@ class PedidoAdapter(private val pedidoList: List<Pedido>) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: PedidoViewHolder, position: Int) {
-        holder.render(pedidoList[position])
+        val item = pedidoList[position]
+        holder.render(item)
+        
+        // Configuramos el click del botón editar desde aquí o pasamos el callback al VH
+        holder.itemView.findViewById<android.view.View>(R.id.btnEditarPedido).setOnClickListener {
+            onEditClick(item)
+        }
     }
 
     override fun getItemCount(): Int = pedidoList.size
+
+    fun addItems(newItems: List<Pedido>) {
+        val startPosition = pedidoList.size
+        pedidoList.addAll(newItems)
+        notifyItemRangeInserted(startPosition, newItems.size)
+    }
 }
